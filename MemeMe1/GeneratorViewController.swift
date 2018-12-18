@@ -150,12 +150,10 @@ class GeneratorViewController: UIViewController, UIImagePickerControllerDelegate
                 return
             }
             // User completed sharing
+            self.save(memeToSave: meme)
         }
         present(ac, animated: true)
-    
-        topText.text = ""
-        bottomText.text = ""
-        memeImage.image = meme.memedImage
+
     }
     
     @IBAction func resetAction(_ sender: Any) {
@@ -179,6 +177,26 @@ class GeneratorViewController: UIViewController, UIImagePickerControllerDelegate
         bottomToolbar.isHidden = false
         
         return memedImage
+    }
+    
+    // Saving Image here
+    func save(memeToSave: Meme) {
+        UIImageWriteToSavedPhotosAlbum(memeToSave.memedImage!, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+    }
+    
+    // Added image to Library result
+    @objc
+    func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+        if let error = error {
+            // Error saving image in library
+            let ac = UIAlertController(title: "Save error", message: error.localizedDescription, preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            present(ac, animated: true)
+        } else {
+            let ac = UIAlertController(title: "Saved!", message: "Your meme is shared and stored in your library", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            present(ac, animated: true)
+        }
     }
 }
 
