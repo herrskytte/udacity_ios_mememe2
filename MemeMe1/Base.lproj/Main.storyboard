@@ -102,12 +102,12 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="bottomText" destination="baR-Lx-ZXf" id="yS5-7C-pC9"/>
+                        <outlet property="bottomTextField" destination="baR-Lx-ZXf" id="yS5-7C-pC9"/>
                         <outlet property="bottomToolbar" destination="llY-88-iqQ" id="f8k-OF-eww"/>
                         <outlet property="cameraButton" destination="5Jd-l1-nA5" id="jxP-c6-rrm"/>
                         <outlet property="memeImage" destination="Wqu-n9-7lM" id="Ltb-LR-w63"/>
                         <outlet property="shareButton" destination="hvd-n6-9Db" id="Kqu-vq-TK1"/>
-                        <outlet property="topText" destination="Ok2-Y6-A4A" id="zve-tY-Flc"/>
+                        <outlet property="topTextField" destination="Ok2-Y6-A4A" id="zve-tY-Flc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

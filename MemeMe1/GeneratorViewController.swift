@@ -8,49 +8,48 @@
 
 import UIKit
 
-class GeneratorViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
+class GeneratorViewController: UIViewController {
 
     let initialTopText = "TOP"
     let initialBottomText = "BOTTOM"
     let memeTextAttributes: [NSAttributedString.Key: Any] = [
-        NSAttributedString.Key.strokeColor: UIColor.black,
-        NSAttributedString.Key.foregroundColor: UIColor.white,
-        NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
-        NSAttributedString.Key.strokeWidth:  -2.0
+        .strokeColor: UIColor.black,
+        .foregroundColor: UIColor.white,
+        .font: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
+        .strokeWidth:  -2.0
     ]
     
     var shouldMoveToShowKeyboard = false
     
     @IBOutlet weak var memeImage: UIImageView!
     @IBOutlet weak var cameraButton: UIBarButtonItem!
-    @IBOutlet weak var topText: UITextField!
-    @IBOutlet weak var bottomText: UITextField!
+    @IBOutlet weak var topTextField: UITextField!
+    @IBOutlet weak var bottomTextField: UITextField!
     @IBOutlet weak var bottomToolbar: UIToolbar!
     @IBOutlet weak var shareButton: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        topText.text = initialTopText
-        bottomText.text = initialBottomText
-        topText.delegate = self
-        bottomText.delegate = self
-        topText.defaultTextAttributes = memeTextAttributes
-        bottomText.defaultTextAttributes = memeTextAttributes
-        topText.textAlignment = NSTextAlignment.center
-        bottomText.textAlignment = NSTextAlignment.center
+
+        setText(topTextField, initialTopText)
+        setText(bottomTextField, initialBottomText)
+        topTextField.delegate = self
+        bottomTextField.delegate = self
+        topTextField.defaultTextAttributes = memeTextAttributes
+        bottomTextField.defaultTextAttributes = memeTextAttributes
+        topTextField.textAlignment = NSTextAlignment.center
+        bottomTextField.textAlignment = NSTextAlignment.center
+    }
+    
+    func setText(_ textField: UITextField, _ text: String) {
+        textField.text = text
     }
     
     override func viewWillAppear(_ animated: Bool) {
         cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
         
-        // Disable share button with no image
-        if memeImage.image != nil {
-            shareButton.isEnabled = true
-        }
-        else{
-            shareButton.isEnabled = false
-        }
+        // Disable share button if no image
+        shareButton.isEnabled = memeImage.image != nil
         
         subscribeToKeyboardNotifications()
     }
@@ -62,60 +61,26 @@ class GeneratorViewController: UIViewController, UIImagePickerControllerDelegate
     }
 
     @IBAction func toolbarPickAction(_ sender: Any) {
-        let pickerController = UIImagePickerController()
-        pickerController.delegate = self
-        pickerController.sourceType = .photoLibrary
-        present(pickerController, animated: true, completion: nil)
-        
+        getImageFromController(source: .photoLibrary)
     }
     
     @IBAction func toolbarTakePictureAction(_ sender: Any) {
+        getImageFromController(source: .camera)
+    }
+    
+    private func getImageFromController(source: UIImagePickerController.SourceType) {
         let pickerController = UIImagePickerController()
         pickerController.delegate = self
-        pickerController.sourceType = .camera
+        pickerController.sourceType = source
         present(pickerController, animated: true, completion: nil)
     }
     
-    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]){
-        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            memeImage.image = image
-            // Enable share button with image
-            shareButton.isEnabled = true
-        }
-        dismiss(animated: true, completion: nil)
-    }
-    
-    public func imagePickerControllerDidCancel(_ picker: UIImagePickerController){
-        dismiss(animated: true, completion: nil)
-    }
-    
-    public func textFieldDidBeginEditing(_ textField: UITextField){
-        if(textField == topText){
-            shouldMoveToShowKeyboard = false
-            if(textField.text == initialTopText){
-                textField.text = ""
-            }
-        }
-        if(textField == bottomText){
-            shouldMoveToShowKeyboard = true
-            if(textField.text == initialBottomText){
-                textField.text = ""
-            }
-        }
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        view.endEditing(true)
-        return true
-    }
-    
-    func subscribeToKeyboardNotifications() {
-        
+    private func subscribeToKeyboardNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    func unsubscribeFromKeyboardNotifications() {
+    private func unsubscribeFromKeyboardNotifications() {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
@@ -140,7 +105,7 @@ class GeneratorViewController: UIViewController, UIImagePickerControllerDelegate
     
     @IBAction func shareAction(_ sender: Any) {
         // Create the meme
-        let meme = Meme(topText: topText.text!, bottomText: bottomText.text!, originalImage: memeImage.image!, memedImage: generateMemedImage())
+        let meme = Meme(topText: topTextField.text!, bottomText: bottomTextField.text!, originalImage: memeImage.image!, memedImage: generateMemedImage())
         
         let items = [meme.memedImage!]
         let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
@@ -157,8 +122,8 @@ class GeneratorViewController: UIViewController, UIImagePickerControllerDelegate
     }
     
     @IBAction func resetAction(_ sender: Any) {
-        topText.text = initialTopText
-        bottomText.text = initialBottomText
+        topTextField.text = initialTopText
+        bottomTextField.text = initialBottomText
         memeImage.image = nil
         shareButton.isEnabled = false
     }
@@ -181,12 +146,12 @@ class GeneratorViewController: UIViewController, UIImagePickerControllerDelegate
     
     // Saving Image here
     func save(memeToSave: Meme) {
-        UIImageWriteToSavedPhotosAlbum(memeToSave.memedImage!, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+        UIImageWriteToSavedPhotosAlbum(memeToSave.memedImage!, self, #selector(imageSaved(_:didFinishSavingWithError:contextInfo:)), nil)
     }
     
     // Added image to Library result
     @objc
-    func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+    func imageSaved(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
         if let error = error {
             // Error saving image in library
             let ac = UIAlertController(title: "Save error", message: error.localizedDescription, preferredStyle: .alert)
@@ -197,6 +162,47 @@ class GeneratorViewController: UIViewController, UIImagePickerControllerDelegate
             ac.addAction(UIAlertAction(title: "OK", style: .default))
             present(ac, animated: true)
         }
+    }
+}
+
+// `UIImagePickerControllerDelegate` methods:
+extension GeneratorViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]){
+        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            memeImage.image = image
+            // Enable share button with image
+            shareButton.isEnabled = true
+        }
+        dismiss(animated: true, completion: nil)
+    }
+    
+    public func imagePickerControllerDidCancel(_ picker: UIImagePickerController){
+        dismiss(animated: true, completion: nil)
+    }
+}
+
+// `UITextFieldDelegate` methods:
+extension GeneratorViewController: UITextFieldDelegate {
+    
+    public func textFieldDidBeginEditing(_ textField: UITextField){
+        if textField == topTextField {
+            shouldMoveToShowKeyboard = false
+            if textField.text == initialTopText {
+                textField.text = ""
+            }
+        }
+        if textField == bottomTextField {
+            shouldMoveToShowKeyboard = true
+            if textField.text == initialBottomText {
+                textField.text = ""
+            }
+        }
+    }
+    
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        view.endEditing(true)
+        return true
     }
 }
 
