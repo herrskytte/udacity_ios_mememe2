@@ -26,10 +26,10 @@
             </objects>
             <point key="canvasLocation" x="-1146" y="-368"/>
         </scene>
-        <!--MemeMe 1.0-->
+        <!--MemeMe 2.0-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="GeneratorViewController" customModule="MemeMe1" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="GeneratorViewController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -89,7 +89,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" title="MemeMe 1.0" id="FBI-jA-ywz">
+                    <navigationItem key="navigationItem" title="MemeMe 2.0" id="FBI-jA-ywz">
                         <barButtonItem key="leftBarButtonItem" systemItem="action" id="hvd-n6-9Db">
                             <connections>
                                 <action selector="shareAction:" destination="BYZ-38-t0r" id="0c7-Vx-ItJ"/>

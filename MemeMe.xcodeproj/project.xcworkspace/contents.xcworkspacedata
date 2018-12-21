@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:MemeMe1.xcodeproj">
+      location = "self:/Users/fsk/Documents/Swift/udacity_ios_mememe2/MemeMe.xcodeproj">
    </FileRef>
 </Workspace>
