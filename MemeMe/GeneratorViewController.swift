@@ -28,6 +28,8 @@ class GeneratorViewController: UIViewController {
     @IBOutlet weak var bottomToolbar: UIToolbar!
     @IBOutlet weak var shareButton: UIBarButtonItem!
     
+    // MARK: ViewControllerMethods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -39,10 +41,6 @@ class GeneratorViewController: UIViewController {
         bottomTextField.defaultTextAttributes = memeTextAttributes
         topTextField.textAlignment = NSTextAlignment.center
         bottomTextField.textAlignment = NSTextAlignment.center
-    }
-    
-    func setText(_ textField: UITextField, _ text: String) {
-        textField.text = text
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,6 +57,8 @@ class GeneratorViewController: UIViewController {
         super.viewWillDisappear(animated)
         unsubscribeFromKeyboardNotifications()
     }
+    
+    // MARK: Action handlers
 
     @IBAction func toolbarPickAction(_ sender: Any) {
         getImageFromController(source: .photoLibrary)
@@ -66,41 +66,6 @@ class GeneratorViewController: UIViewController {
     
     @IBAction func toolbarTakePictureAction(_ sender: Any) {
         getImageFromController(source: .camera)
-    }
-    
-    private func getImageFromController(source: UIImagePickerController.SourceType) {
-        let pickerController = UIImagePickerController()
-        pickerController.delegate = self
-        pickerController.sourceType = source
-        present(pickerController, animated: true, completion: nil)
-    }
-    
-    private func subscribeToKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    private func unsubscribeFromKeyboardNotifications() {
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc
-    func keyboardWillShow(_ notification:Notification) {
-        if(shouldMoveToShowKeyboard){
-            view.frame.origin.y -= getKeyboardHeight(notification)
-        }
-    }
-    
-    @objc
-    func keyboardWillHide(_ notification:Notification) {
-        view.frame.origin.y = 0
-    }
-    
-    func getKeyboardHeight(_ notification:Notification) -> CGFloat {
-        let userInfo = notification.userInfo
-        let keyboardSize = userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue // of CGRect
-        return keyboardSize.cgRectValue.height
     }
     
     @IBAction func shareAction(_ sender: Any) {
@@ -118,14 +83,49 @@ class GeneratorViewController: UIViewController {
             self.save(memeToSave: meme)
         }
         present(ac, animated: true)
-
+        
     }
     
-    @IBAction func resetAction(_ sender: Any) {
-        topTextField.text = initialTopText
-        bottomTextField.text = initialBottomText
-        memeImage.image = nil
-        shareButton.isEnabled = false
+    @IBAction func cancelAction(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    // MARK: Keyboard methods
+    
+    private func subscribeToKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    private func unsubscribeFromKeyboardNotifications() {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc
+    func keyboardWillShow(_ notification:Notification) {
+        if(shouldMoveToShowKeyboard){
+            view.frame.origin.y = -getKeyboardHeight(notification)
+        }
+    }
+    
+    @objc
+    func keyboardWillHide(_ notification:Notification) {
+        view.frame.origin.y = 0
+    }
+    
+    func getKeyboardHeight(_ notification:Notification) -> CGFloat {
+        let keyboardSize = notification.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue
+        return keyboardSize.cgRectValue.height
+    }
+    
+    // MARK: Image handling
+    
+    private func getImageFromController(source: UIImagePickerController.SourceType) {
+        let pickerController = UIImagePickerController()
+        pickerController.delegate = self
+        pickerController.sourceType = source
+        present(pickerController, animated: true, completion: nil)
     }
     
     func generateMemedImage() -> UIImage {
@@ -146,22 +146,15 @@ class GeneratorViewController: UIViewController {
     
     // Saving Image here
     func save(memeToSave: Meme) {
-        UIImageWriteToSavedPhotosAlbum(memeToSave.memedImage!, self, #selector(imageSaved(_:didFinishSavingWithError:contextInfo:)), nil)
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.memes.append(memeToSave)
+        cancelAction(self)
     }
     
-    // Added image to Library result
-    @objc
-    func imageSaved(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
-        if let error = error {
-            // Error saving image in library
-            let ac = UIAlertController(title: "Save error", message: error.localizedDescription, preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "OK", style: .default))
-            present(ac, animated: true)
-        } else {
-            let ac = UIAlertController(title: "Saved!", message: "Your meme is shared and stored in your library", preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "OK", style: .default))
-            present(ac, animated: true)
-        }
+    // MARK: Helper methods
+    
+    func setText(_ textField: UITextField, _ text: String) {
+        textField.text = text
     }
 }
 
