@@ -47,6 +47,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         memes.append(meme3)
         memes.append(meme1)
         memes.append(meme2)
+        memes.append(meme2)
+        memes.append(meme3)
+        memes.append(meme3)
+        memes.append(meme1)
+        memes.append(meme1)
+        memes.append(meme2)
     }
 }
 

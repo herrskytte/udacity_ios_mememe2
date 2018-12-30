@@ -165,15 +165,15 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="AZe-7h-Dsd">
-                                            <rect key="frame" x="8" y="8" width="150" height="150"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="166" height="166"/>
                                         </imageView>
                                     </subviews>
                                 </view>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="AZe-7h-Dsd" secondAttribute="trailing" constant="8" id="52V-lE-pnI"/>
-                                    <constraint firstItem="AZe-7h-Dsd" firstAttribute="leading" secondItem="pCr-jP-HLE" secondAttribute="leading" constant="8" id="Hup-gp-G3W"/>
-                                    <constraint firstItem="AZe-7h-Dsd" firstAttribute="top" secondItem="pCr-jP-HLE" secondAttribute="top" constant="8" id="S0e-GF-UXX"/>
-                                    <constraint firstAttribute="bottom" secondItem="AZe-7h-Dsd" secondAttribute="bottom" constant="8" id="dgj-IZ-LFT"/>
+                                    <constraint firstAttribute="trailing" secondItem="AZe-7h-Dsd" secondAttribute="trailing" id="52V-lE-pnI"/>
+                                    <constraint firstItem="AZe-7h-Dsd" firstAttribute="leading" secondItem="pCr-jP-HLE" secondAttribute="leading" id="Hup-gp-G3W"/>
+                                    <constraint firstItem="AZe-7h-Dsd" firstAttribute="top" secondItem="pCr-jP-HLE" secondAttribute="top" id="S0e-GF-UXX"/>
+                                    <constraint firstAttribute="bottom" secondItem="AZe-7h-Dsd" secondAttribute="bottom" id="dgj-IZ-LFT"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="memeImageView" destination="AZe-7h-Dsd" id="LTJ-5s-uV2"/>
@@ -193,6 +193,9 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="collectionFlowLayout" destination="Jm8-KZ-MyT" id="1Tw-JX-srT"/>
+                    </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="75U-EF-T7O" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -333,6 +336,6 @@
         <image name="table" width="60" height="60"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="eLf-e1-Ygu"/>
+        <segue reference="uCa-30-pIL"/>
     </inferredMetricsTieBreakers>
 </document>

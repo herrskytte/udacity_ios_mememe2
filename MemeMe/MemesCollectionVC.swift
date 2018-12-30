@@ -11,17 +11,31 @@ import UIKit
 class MemesCollectionVC: UICollectionViewController {
     
     var allMemes: [Meme]?
+    let space:CGFloat = 8.0
+    
+    @IBOutlet weak var collectionFlowLayout: UICollectionViewFlowLayout!
     
     // MARK: ViewControllerMethods
     
     override func viewDidLoad() {
-        super.viewDidLoad()
+        collectionFlowLayout.minimumInteritemSpacing = space
+        collectionFlowLayout.minimumLineSpacing = space
         
+        let horizontalWidth = UIDevice.current.orientation.isPortrait ?
+            view.frame.size.width : view.frame.size.height
+        
+        updateFlowLayoutProperties(toWidth: horizontalWidth)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         allMemes = appDelegate.memes
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        updateFlowLayoutProperties(toWidth: size.width)
     }
     
     // MARK: Collection View Data Source
@@ -52,5 +66,14 @@ class MemesCollectionVC: UICollectionViewController {
         // Present the view controller using navigation
         navigationController!.pushViewController(detailController, animated: true)
         
+    }
+    
+    // MARK: Private helper fuctions
+    
+    private func updateFlowLayoutProperties(toWidth width: CGFloat){
+        let imagesPerRow: CGFloat = UIDevice.current.orientation.isPortrait ? 3.0 : 4.0
+        let dimension = (width - ((imagesPerRow - 1.0) * self.space)) / imagesPerRow
+        
+        collectionFlowLayout.itemSize = CGSize(width: dimension, height: dimension)
     }
 }
