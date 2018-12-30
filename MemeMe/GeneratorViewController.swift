@@ -144,10 +144,10 @@ class GeneratorViewController: UIViewController {
         return memedImage
     }
     
-    // Saving Image here
+    // Saving Image here (inserting at beginning to easily see recently added meme first
     func save(memeToSave: Meme) {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        appDelegate.memes.append(memeToSave)
+        appDelegate.memes.insert(memeToSave, at:0)
         cancelAction(self)
     }
     
