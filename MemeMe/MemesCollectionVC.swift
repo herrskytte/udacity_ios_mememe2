@@ -10,7 +10,10 @@ import UIKit
 
 class MemesCollectionVC: UICollectionViewController {
     
-    var allMemes: [Meme]?
+    var allMemes: [Meme]! {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        return appDelegate.memes
+    }
     let space:CGFloat = 8.0
     
     @IBOutlet weak var collectionFlowLayout: UICollectionViewFlowLayout!
@@ -18,8 +21,8 @@ class MemesCollectionVC: UICollectionViewController {
     // MARK: ViewControllerMethods
     
     override func viewDidLoad() {
-        collectionFlowLayout.minimumInteritemSpacing = space
-        collectionFlowLayout.minimumLineSpacing = space
+        self.collectionFlowLayout?.minimumInteritemSpacing = space
+        self.collectionFlowLayout?.minimumLineSpacing = space
         
         let horizontalWidth = UIDevice.current.orientation.isPortrait ?
             view.frame.size.width : view.frame.size.height
@@ -28,8 +31,7 @@ class MemesCollectionVC: UICollectionViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        allMemes = appDelegate.memes
+        collectionView!.reloadData()
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -74,6 +76,6 @@ class MemesCollectionVC: UICollectionViewController {
         let imagesPerRow: CGFloat = UIDevice.current.orientation.isPortrait ? 3.0 : 4.0
         let dimension = (width - ((imagesPerRow - 1.0) * self.space)) / imagesPerRow
         
-        collectionFlowLayout.itemSize = CGSize(width: dimension, height: dimension)
+        self.collectionFlowLayout?.itemSize = CGSize(width: dimension, height: dimension)
     }
 }

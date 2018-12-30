@@ -164,7 +164,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="166" height="166"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="AZe-7h-Dsd">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="AZe-7h-Dsd">
                                             <rect key="frame" x="0.0" y="0.0" width="166" height="166"/>
                                         </imageView>
                                     </subviews>
@@ -324,6 +324,7 @@
                         <outlet property="memeImage" destination="Wqu-n9-7lM" id="Ltb-LR-w63"/>
                         <outlet property="shareButton" destination="HvN-wp-wea" id="s25-os-uhT"/>
                         <outlet property="topTextField" destination="Ok2-Y6-A4A" id="zve-tY-Flc"/>
+                        <outlet property="topToolbar" destination="rX5-aS-15w" id="U6H-z9-uW4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

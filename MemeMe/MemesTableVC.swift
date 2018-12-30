@@ -10,18 +10,16 @@ import UIKit
 
 class MemesTableVC: UITableViewController {
     
-    var allMemes: [Meme]?
+    var allMemes: [Meme]! {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        return appDelegate.memes
+    }
     
     // MARK: ViewControllerMethods
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        allMemes = appDelegate.memes
+        super.viewWillAppear(animated)
+        tableView!.reloadData()
     }
     
     // MARK: Table View Data Source

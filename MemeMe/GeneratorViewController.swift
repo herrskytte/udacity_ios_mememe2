@@ -25,6 +25,7 @@ class GeneratorViewController: UIViewController {
     @IBOutlet weak var cameraButton: UIBarButtonItem!
     @IBOutlet weak var topTextField: UITextField!
     @IBOutlet weak var bottomTextField: UITextField!
+    @IBOutlet weak var topToolbar: UINavigationBar!
     @IBOutlet weak var bottomToolbar: UIToolbar!
     @IBOutlet weak var shareButton: UIBarButtonItem!
     
@@ -131,6 +132,7 @@ class GeneratorViewController: UIViewController {
     func generateMemedImage() -> UIImage {
         // Hide toolbar
         bottomToolbar.isHidden = true
+        topToolbar.isHidden = true
         
         // Render view to an image
         UIGraphicsBeginImageContext(self.view.frame.size)
@@ -140,6 +142,7 @@ class GeneratorViewController: UIViewController {
         
         // Show toolbar again
         bottomToolbar.isHidden = false
+        topToolbar.isHidden = false
         
         return memedImage
     }
